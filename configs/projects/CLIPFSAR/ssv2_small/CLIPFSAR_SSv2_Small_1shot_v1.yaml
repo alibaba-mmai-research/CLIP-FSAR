@@ -1,0 +1,85 @@
+_BASE: ../OTAM_base.yaml
+TASK_TYPE: few_shot_action
+TRAIN:
+  ENABLE: true
+  USE_CLASSIFICATION: true
+  USE_CLASSIFICATION_VALUE: 3.0
+  DATASET: Ssv2_few_shot
+  META_BATCH: true  # meta or not
+  NUM_SAMPLES: 1000000
+  WAY: 5
+  SHOT: 1
+  QUERY_PER_CLASS: 5
+  QUERY_PER_CLASS_TEST: 1
+  NUM_TRAIN_TASKS: 30000
+  NUM_TEST_TASKS: 10000
+  VAL_FRE_ITER: 1000
+  BATCH_SIZE: 4 # Same with NUM_GPUS
+  BATCH_SIZE_PER_TASK: 4
+  CLASS_NAME: ['Pouring [something] into [something]', 'Poking a stack of [something] without the stack collapsing', 'Pretending to poke [something]', 'Lifting up one end of [something] without letting it drop down', 'Moving [part] of [something]', 'Moving [something] and [something] away from each other', 'Removing [something], revealing [something] behind', 'Plugging [something] into [something]', 'Tipping [something] with [something in it] over, so [something in it] falls out', 'Stacking [number of] [something]', "Putting [something] onto a slanted surface but it doesn't glide down", 'Moving [something] across a surface until it falls down', 'Throwing [something] in the air and catching it', 'Putting [something that cannot actually stand upright] upright on the table, so it falls on its side', 'Holding [something] next to [something]', 'Pretending to put [something] underneath [something]', "Poking [something] so lightly that it doesn't or almost doesn't move", 'Approaching [something] with your camera', 'Poking [something] so that it spins around', 'Pushing [something] so that it falls off the table', 'Spilling [something] next to [something]', 'Pretending or trying and failing to twist [something]', 'Pulling two ends of [something] so that it separates into two pieces', 'Lifting up one end of [something], then letting it drop down', "Tilting [something] with [something] on it slightly so it doesn't fall down", 'Spreading [something] onto [something]', 'Touching (without moving) [part] of [something]', 'Turning the camera left while filming [something]', 'Pushing [something] so that it slightly moves', 'Uncovering [something]', 'Moving [something] across a surface without it falling down', 'Putting [something] behind [something]', 'Attaching [something] to [something]', 'Pulling [something] onto [something]', 'Burying [something] in [something]', 'Putting [number of] [something] onto [something]', 'Letting [something] roll along a flat surface', 'Bending [something] until it breaks', 'Showing [something] behind [something]', 'Pretending to open [something] without actually opening it', 'Pretending to put [something] onto [something]', 'Moving away from [something] with your camera', 'Wiping [something] off of [something]', 'Pretending to spread air onto [something]', 'Holding [something] over [something]', 'Pretending or failing to wipe [something] off of [something]', 'Pretending to put [something] on a surface', 'Moving [something] and [something] so they collide with each other', 'Pretending to turn [something] upside down', 'Showing [something] to the camera', 'Dropping [something] onto [something]', "Pushing [something] so that it almost falls off but doesn't", 'Piling [something] up', 'Taking [one of many similar things on the table]', 'Putting [something] in front of [something]', 'Laying [something] on the table on its side, not upright', 'Lifting a surface with [something] on it until it starts sliding down', 'Poking [something] so it slightly moves', 'Putting [something] into [something]', 'Pulling [something] from right to left', 'Showing that [something] is empty', 'Spilling [something] behind [something]', 'Letting [something] roll down a slanted surface', 'Holding [something] behind [something]']
+  CHECKPOINT_FILE_PATH: ""
+  EVAL_PERIOD: 2
+  NUM_FOLDS: 1
+
+AUGMENTATION:
+  COLOR_AUG: false
+  NO_RANDOM_ERASE: true
+  
+
+TEST:
+  ENABLE: false
+  DATASET: Ssv2_few_shot
+  BATCH_SIZE: 4 # Same with NUM_GPUS
+  CLASS_NAME: ['Twisting (wringing) [something] wet until water comes out', 'Poking a hole into [something soft]', 'Pretending to take [something] from [somewhere]', 'Putting [something] upright on the table', 'Poking a hole into [some substance]', 'Rolling [something] on a flat surface', 'Poking a stack of [something] so the stack collapses', 'Twisting [something]', '[Something] falling like a feather or paper', 'Putting [something] on the edge of [something] so it is not supported and falls down', 'Pushing [something] off of [something]', 'Dropping [something] into [something]', 'Letting [something] roll up a slanted surface, so it rolls back down', 'Pushing [something] with [something]', 'Opening [something]', 'Putting [something] on a surface', 'Taking [something] out of [something]', 'Spinning [something] that quickly stops spinning', 'Unfolding [something]', 'Moving [something] towards the camera', 'Putting [something] next to [something]', 'Scooping [something] up with [something]', 'Squeezing [something]', 'Failing to put [something] into [something] because [something] does not fit']
+  TEST_SET: val
+  NUM_ENSEMBLE_VIEWS: 1
+  SPATIAL_CROPS: cctltr
+  AUTOMATIC_MULTI_SCALE_TEST: false
+  UPLOAD_CLASSIFIER_RESULTS: true
+
+DATA:
+  DATA_ROOT_DIR: /mnt/workspace/SSv2/  
+  ANNO_DIR: ./configs/projects/CLIPFSAR/ssv2_small/
+  NUM_INPUT_FRAMES: 8
+  SAMPLING_RATE: 50
+  SAMPLING_UNIFORM: false
+  TRAIN_JITTER_SCALES: [256, 256]
+  TRAIN_CROP_SIZE: 224 # 84  # 224
+  MEAN: [0.48145466, 0.4578275, 0.40821073]
+  STD: [0.26862954, 0.26130258, 0.27577711]
+  TEST_CROP_SIZE: 224
+  TEST_SCALE: 256
+  TEST_CENTER_CROP: true
+  CLIP_INTERVAL: 8
+  FPS: 12
+  TARGET_FPS: 12
+
+LOG_PERIOD: 50
+SOLVER:
+  BASE_LR: 0.00005 
+  LR_POLICY: steps_with_relative_lrs
+  STEPS_ITER: 2000
+  STEPS: [0, 4, 6]
+  LRS: [1, 0.1, 0.01]
+  MAX_EPOCH: 10
+  MOMENTUM: 0.9
+  WEIGHT_DECAY: 5e-5
+  WARMUP_EPOCHS: 1
+  WARMUP_START_LR: 0.00002
+  OPTIM_METHOD: adam
+  DAMPENING: 0.0
+  NESTEROV: true
+# add bn, use same lr settings as server
+
+VIDEO:
+  HEAD:
+    NAME: CNN_OTAM_CLIPFSAR  
+    BACKBONE_NAME: "RN50"
+    
+  BACKBONE:
+    META_ARCH: Identity
+
+NUM_GPUS: 4
+OUTPUT_DIR: output/CLIPFSAR_SSv2_Small_1shot
+
+

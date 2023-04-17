@@ -1,0 +1,88 @@
+_BASE: ../OTAM_base.yaml
+TASK_TYPE: few_shot_action
+RANDOM_SEED: 18
+TRAIN:
+  ENABLE: true
+  USE_CLASSIFICATION: true
+  USE_CLASSIFICATION_VALUE: 1.5 
+  DATASET: Ssv2_few_shot
+  DATASET_FEW: Kinetics_few_shot
+  META_BATCH: true  # meta or not
+  NUM_SAMPLES: 1000000
+  WAY: 5
+  SHOT: 1
+  QUERY_PER_CLASS: 5
+  QUERY_PER_CLASS_TEST: 1
+  NUM_TRAIN_TASKS: 5000
+  NUM_TEST_TASKS: 10000
+  VAL_FRE_ITER: 100
+  BATCH_SIZE: 4  # Same with NUM_GPUS
+  CLASS_NAME: ['air drumming', 'arm wrestling', 'beatboxing', 'biking through snow', 'blowing glass', 'blowing out candles', 'bowling', 'breakdancing', 'bungee jumping', 'catching or throwing baseball', 'cheerleading', 'cleaning floor', 'contact juggling', 'cooking chicken', 'country line dancing', 'curling hair', 'deadlifting', 'doing nails', 'dribbling basketball', 'driving tractor', 'drop kicking', 'dying hair', 'eating burger', 'feeding birds', 'giving or receiving award', 'hopscotch', 'jetskiing', 'jumping into pool', 'laughing', 'making snowman', 'massaging back', 'mowing lawn', 'opening bottle', 'playing accordion', 'playing badminton', 'playing basketball', 'playing didgeridoo', 'playing ice hockey', 'playing keyboard', 'playing ukulele', 'playing xylophone', 'presenting weather forecast', 'punching bag', 'pushing cart', 'reading book', 'riding unicycle', 'shaking head', 'sharpening pencil', 'shaving head', 'shot put', 'shuffling cards', 'slacklining', 'sled dog racing', 'snowboarding', 'somersaulting', 'squat', 'surfing crowd', 'trapezing', 'using computer', 'washing dishes', 'washing hands', 'water skiing', 'waxing legs', 'weaving basket']
+  BATCH_SIZE_PER_TASK: 4
+  CHECKPOINT_FILE_PATH: ""
+  EVAL_PERIOD: 2
+  NUM_FOLDS: 1
+
+AUGMENTATION:
+  COLOR_AUG: false
+  NO_RANDOM_ERASE: true
+  SUPPORT_QUERY_DIFF: true
+
+TEST:
+  ENABLE: false
+  DATASET: Ssv2_few_shot
+  BATCH_SIZE: 4  # Same with NUM_GPUS
+  TEST_SET: val
+  NUM_ENSEMBLE_VIEWS: 1
+  SPATIAL_CROPS: cctltr
+  CLASS_NAME: ['blasting sand',  'busking',  'cutting watermelon',  'dancing ballet', 'dancing charleston',  'dancing macarena',  'diving cliff', 'filling eyebrows', 'folding paper',  'hula hooping', 'hurling (sport)',  'ice skating',  'paragliding', 'playing drums',  'playing monopoly', 'playing trumpet', 'pushing car', 'riding elephant',  'shearing sheep', 'side kick', 'stretching arm', 'tap dancing', 'throwing axe',  'unboxing']
+  AUTOMATIC_MULTI_SCALE_TEST: false
+  UPLOAD_CLASSIFIER_RESULTS: true
+
+DATA:
+  DATA_ROOT_DIR: /mnt/workspace/kinetics400_fb/  
+  ANNO_DIR: ./configs/projects/CLIPFSAR/kinetics100/
+  NUM_INPUT_FRAMES: 8
+  SAMPLING_RATE: 35
+  SAMPLING_UNIFORM: false
+  TRAIN_JITTER_SCALES: [256, 256]
+  MEAN: [0.48145466, 0.4578275, 0.40821073]
+  STD: [0.26862954, 0.26130258, 0.27577711]
+  TRAIN_CROP_SIZE: 224 # 84  # 224
+  TEST_CROP_SIZE: 224
+  TEST_SCALE: 256
+  CLIP_INTERVAL: 8
+  TEST_CENTER_CROP: true
+  FPS: 12
+  TARGET_FPS: 12
+
+LOG_PERIOD: 50
+SOLVER:
+  BASE_LR: 0.00001
+  LR_POLICY: steps_with_relative_lrs
+  STEPS_ITER: 250 
+  STEPS: [0, 6, 9]
+  LRS: [1, 0.1, 0.01]
+  MAX_EPOCH: 10
+  MOMENTUM: 0.9
+  WEIGHT_DECAY: 5e-4  
+  WARMUP_EPOCHS: 1
+  WARMUP_START_LR: 0.000005
+  OPTIM_METHOD: adam
+  DAMPENING: 0.0
+  NESTEROV: true
+# add bn, use same lr settings as server
+
+VIDEO:
+  HEAD:
+    NAME: CNN_OTAM_CLIPFSAR
+    BACKBONE_NAME: "RN50"
+    
+  BACKBONE:
+    META_ARCH: Identity
+
+
+NUM_GPUS: 4
+OUTPUT_DIR: output/CLIPFSAR_K100_1shot
+
+

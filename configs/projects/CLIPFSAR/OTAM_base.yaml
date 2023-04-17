@@ -1,0 +1,55 @@
+_BASE_RUN: ../../pool/run/training/finetune.yaml
+_BASE_MODEL: ../../pool/backbone/localization-conv.yaml
+
+# MULTI_CARD: true  # for single devices multi-card -> true
+PRETRAIN:
+  ENABLE: false
+TRAIN:
+  ENABLE: true
+  BATCH_SIZE: 2048
+  DATASET: Talfeature
+  CHECKPOINT_FILE_PATH: ""
+  EVAL_PERIOD: 1
+  NUM_FOLDS: 1
+TEST:
+  ENABLE: true
+  DATASET: Talfeature
+  BATCH_SIZE: 2048
+  TEST_SET: val
+  AUTOMATIC_MULTI_SCALE_TEST: false
+  UPLOAD_CLASSIFIER_RESULTS: true
+DATA:
+  NORM_FEATURE: false
+  USE_AUG_FEATURE: false
+  AUG: false
+  LOAD_PROPS: false
+  TEMPORAL_SCALE: 256
+  NUM_INPUT_CHANNELS: 2304
+  LABELS_TYPE: cls
+  LOAD_TYPE: pickle
+  DOWNLOAD_FEATURE: true
+
+LOG_PERIOD: 1
+SOLVER:
+  BASE_LR: 0.0002
+  LR_POLICY: cosine
+  MAX_EPOCH: 300
+  MOMENTUM: 0.9
+  WEIGHT_DECAY: 1e-3
+  WARMUP_EPOCHS: 10
+  WARMUP_START_LR: 0.000001
+  OPTIM_METHOD: adam
+  DAMPENING: 0.0
+  NESTEROV: true
+  
+VIDEO:
+  HEAD:
+    NAME: BaseTemporalClassifier
+    NUM_CLASSES: 200
+    DROPOUT_RATE: 0.0
+  BACKBONE:
+    META_ARCH: Identity
+PRE_DOWNLOAD:
+  ENABLE: false
+AUGMENTATION:
+  USE_GPU: false
