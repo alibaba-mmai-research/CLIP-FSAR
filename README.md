@@ -1,4 +1,4 @@
-# CLIP-guided Prototype Modulating for Few-shot Action Recognition
+# CLIP-guided Prototype Modulating for Few-shot Action Recognition (IJCV-2023)
 ### Official Pytorch Implementation of [CLIP-FSAR](https://arxiv.org/pdf/2303.02982.pdf)
 
 <img src = "CLIPFSAR_arch.png" width="800">
@@ -88,7 +88,7 @@ If you find this code useful, please cite our paper.
 @article{wang2023clip,
   title={CLIP-guided Prototype Modulating for Few-shot Action Recognition},
   author={Wang, Xiang and Zhang, Shiwei and Cen, Jun and Gao, Changxin and Zhang, Yingya and Zhao, Deli and Sang, Nong},
-  journal={arXiv preprint arXiv:2303.02982},
+  journal={International Journal of Computer Vision (IJCV)},
   year={2023}
 }
 ~~~~
