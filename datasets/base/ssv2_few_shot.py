@@ -210,8 +210,13 @@ class Ssv2_few_shot(BaseVideoDataset):
 
             if self.split == "train":
                 n_queries = self.cfg.TRAIN.QUERY_PER_CLASS
+                SHOT = self.cfg.TRAIN.SHOT
             else:
                 n_queries = self.cfg.TRAIN.QUERY_PER_CLASS_TEST
+                if hasattr(self.cfg.TRAIN, "SHOT_TEST"):
+                    SHOT = self.cfg.TRAIN.SHOT_TEST
+                else:
+                    SHOT = self.cfg.TRAIN.SHOT
             
 
             retries = 5
@@ -230,9 +235,9 @@ class Ssv2_few_shot(BaseVideoDataset):
                         # retries = 5
                         # for retry in range(retries):
                         #     try:
-                        idxs = random.sample([i for i in range(n_total)], self.cfg.TRAIN.SHOT + n_queries)
+                        idxs = random.sample([i for i in range(n_total)], SHOT + n_queries)
 
-                        for idx in idxs[0:self.cfg.TRAIN.SHOT]:
+                        for idx in idxs[0:SHOT]:
                             if hasattr(self.cfg.AUGMENTATION, "SUPPORT_QUERY_DIFF_SUPPORT") and self.cfg.AUGMENTATION.SUPPORT_QUERY_DIFF_SUPPORT and self.split_dataset=="train":
                                 vid, vid_id = self.get_seq_query(bc, idx)
                             else:
@@ -242,7 +247,7 @@ class Ssv2_few_shot(BaseVideoDataset):
                             real_support_labels.append(bc)
                         
                         # try:
-                        for idx in idxs[self.cfg.TRAIN.SHOT:]:
+                        for idx in idxs[SHOT:]:
                             if hasattr(self.cfg.AUGMENTATION, "SUPPORT_QUERY_DIFF") and self.cfg.AUGMENTATION.SUPPORT_QUERY_DIFF and self.split_dataset=="train":
                                 vid, vid_id = self.get_seq_query(bc, idx)
                             else:
